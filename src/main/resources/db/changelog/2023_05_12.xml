@@ -90,6 +90,7 @@
                                                  model varchar NOT NULL,
                                                  port_address varchar NOT NULL,
                                                  week_price decimal,
+                                                 day_price decimal,
                                                  captain_salary_per_day decimal,
                                                  with_captain bigint NOT NULL default 2,
                                                  FOREIGN KEY (with_captain) REFERENCES with_captain (id),

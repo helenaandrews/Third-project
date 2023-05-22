@@ -1,5 +1,6 @@
 package com.rentmyboat.rentmyboat.service;
 
+import com.rentmyboat.rentmyboat.configs.PasswordEncoder;
 import com.rentmyboat.rentmyboat.dto.UsersDto;
 import com.rentmyboat.rentmyboat.mappers.UsersMapper;
 import com.rentmyboat.rentmyboat.model.Users;
@@ -16,11 +17,13 @@ import java.util.Optional;
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository repository;
     private final UsersMapper usersMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsersServiceImpl(UsersRepository usersRepository, UsersMapper usersMapper) {
+    public UsersServiceImpl(UsersRepository usersRepository, UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
         this.repository = usersRepository;
         this.usersMapper = usersMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -49,6 +52,18 @@ public class UsersServiceImpl implements UsersService {
             log.info("This user doesn't exist");
             throw new NoSuchElementException("No value present");
         }
+    }
+    @Override
+    public void save(Users user) {
+        user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
+        repository.save(user);
+        log.info("new user was successfully created and saved in db");
+    }
+
+    @Override
+    public Optional<Users> findByUsername(String username) {
+        log.info("trying to find user with username: {} " + username);
+        return repository.findByUsername(username);
     }
 
     /* TODO: эндпоинты для удаления резюме и лодки (?)

@@ -29,6 +29,7 @@ public class BoatUpdateDto {
     private String model;
     private String portAddress;
     private Double weekPrice;
+    private Double dayPrice;
     private Double captainSalaryPerDay;
     private Long withCaptain;
     private boolean hasEngine;

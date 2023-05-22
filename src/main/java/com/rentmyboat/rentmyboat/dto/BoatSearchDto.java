@@ -27,6 +27,8 @@ public class BoatSearchDto {
     private Integer lengthMax;
     private Double weekPriceMin;
     private Double weekPriceMax;
+    private Double dayPriceMin;
+    private Double dayPriceMax;
     private Double captainSalaryPerDayMin;
     private Double captainSalaryPerDayMax;
     private Integer yearMin;

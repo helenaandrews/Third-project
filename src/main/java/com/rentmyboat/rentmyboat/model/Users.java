@@ -1,6 +1,8 @@
 package com.rentmyboat.rentmyboat.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -17,6 +19,18 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "username", nullable = false, unique = true)
+    @Size(min = 6, max = 32, message  = "username from 6 to 32 symbols")
+    private String username;
+
+    @Column(name = "password", nullable = false)
+    @Size(min = 6, max = 32, message  = "password from 6 to 32 symbols")
+    private String password;
+
+    @Column(name = "role", nullable = false)
+    @NotBlank(message = "roles must be boat_owner or boat_renter")
+    private String role;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;

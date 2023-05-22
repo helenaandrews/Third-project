@@ -101,16 +101,22 @@ public class BoatServiceImpl implements BoatService {
             predicateList.add(cb.lessThan(boat.get("length"), boatSearchDto.getLengthMax()));
         }
         if (boatSearchDto.getWeekPriceMin() != null) {
-            predicateList.add(cb.greaterThan(boat.get("week_price"), boatSearchDto.getWeekPriceMin()));
+            predicateList.add(cb.greaterThan(boat.get("weekPrice"), boatSearchDto.getWeekPriceMin()));
         }
         if (boatSearchDto.getWeekPriceMax() != null) {
-            predicateList.add(cb.lessThan(boat.get("week_price"), boatSearchDto.getWeekPriceMax()));
+            predicateList.add(cb.lessThan(boat.get("weekPrice"), boatSearchDto.getWeekPriceMax()));
+        }
+        if (boatSearchDto.getDayPriceMin() != null) {
+            predicateList.add(cb.greaterThan(boat.get("dayPrice"), boatSearchDto.getDayPriceMin()));
+        }
+        if (boatSearchDto.getDayPriceMax() != null) {
+            predicateList.add(cb.lessThan(boat.get("dayPrice"), boatSearchDto.getDayPriceMax()));
         }
         if (boatSearchDto.getCaptainSalaryPerDayMin() != null) {
-            predicateList.add(cb.greaterThan(boat.get("captain_salary_per_day"), boatSearchDto.getCaptainSalaryPerDayMin()));
+            predicateList.add(cb.greaterThan(boat.get("captainSalaryPerDay"), boatSearchDto.getCaptainSalaryPerDayMin()));
         }
         if (boatSearchDto.getCaptainSalaryPerDayMax() != null) {
-            predicateList.add(cb.lessThan(boat.get("captain_salary_per_day"), boatSearchDto.getCaptainSalaryPerDayMax()));
+            predicateList.add(cb.lessThan(boat.get("captainSalaryPerDay"), boatSearchDto.getCaptainSalaryPerDayMax()));
         }
         if (boatSearchDto.getYearMin() != null) {
             predicateList.add(cb.greaterThan(boat.get("year"), boatSearchDto.getYearMin()));
@@ -125,10 +131,10 @@ public class BoatServiceImpl implements BoatService {
             predicateList.add(cb.equal(boat.get("model"), boatSearchDto.getModel()));
         }
         if (boatSearchDto.getEnginePowerMin() != null) {
-            predicateList.add(cb.greaterThan(boat.get("engine_power"), boatSearchDto.getEnginePowerMin()));
+            predicateList.add(cb.greaterThan(boat.get("enginePower"), boatSearchDto.getEnginePowerMin()));
         }
         if (boatSearchDto.getEnginePowerMax() != null) {
-            predicateList.add(cb.lessThan(boat.get("engine_power"), boatSearchDto.getEnginePowerMax()));
+            predicateList.add(cb.lessThan(boat.get("enginePower"), boatSearchDto.getEnginePowerMax()));
         }
         cq.where(predicateList.toArray(new Predicate[0]));
         List<Boat> boats = em.createQuery(cq).getResultList();

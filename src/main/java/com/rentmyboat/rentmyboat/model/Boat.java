@@ -62,6 +62,9 @@ public class Boat {
     @Column(name = "week_price")
     private Double weekPrice;
 
+    @Column(name = "day_price")
+    private Double dayPrice;
+
     @Column(name = "captain_salary_per_day")
     private Double captainSalaryPerDay;
 

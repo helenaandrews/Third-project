@@ -5,10 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="init db" author="Olga Ko">
+    <changeSet id="add users data" author="Maria">
         <sql>
+
             ALTER TABLE users
-                ADD is_active boolean NOT NULL DEFAULT true;
+            ADD username varchar NOT NULL UNIQUE,
+            ADD password varchar NOT NULL,
+            ADD role varchar NOT NULL;
+
         </sql>
     </changeSet>
 </databaseChangeLog>
