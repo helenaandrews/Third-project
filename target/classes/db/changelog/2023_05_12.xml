@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="init db" author="Olga Ko">
+        <sql>
+            CREATE TYPE gender_type AS ENUM('male', 'female');
+            CREATE TYPE is_captain_type AS ENUM('yes', 'no', 'both');
+
+            Create table if not exists boat_level (
+                                                      id bigserial PRIMARY KEY,
+                                                      name varchar NOT NULL
+            );
+
+            Create table if not exists boat_type (
+                                                     id bigserial PRIMARY KEY,
+                                                     name varchar NOT NULL
+            );
+
+            Create table if not exists resume (
+                                                id bigserial PRIMARY KEY,
+                                                level_id bigint,
+                                                FOREIGN KEY (level_id) REFERENCES boat_level (id),
+                                                boat_type_id bigint,
+                                                FOREIGN KEY (boat_type_id) REFERENCES boat_type (id),
+                                                shore boolean NOT NULL default FALSE,
+                                                open_sea boolean NOT NULL default FALSE,
+                                                radio boolean NOT NULL default FALSE,
+                                                licensed_skipper boolean NOT NULL default FALSE,
+                                                rented_before boolean NOT NULL default FALSE,
+                                                info_about text NOT NULL
+            );
+
+            Create table if not exists users (
+                                                  id bigserial PRIMARY KEY,
+                                                  first_name varchar NOT NULL,
+                                                  last_name varchar NOT NULL,
+                                                  gender gender_type NOT NULL,
+                                                  email varchar NOT NULL,
+                                                  phone_number varchar NOT NULL,
+                                                  photo_link varchar,
+                                                  birth_date date NOT NULL,
+                                                  postal_code varchar NOT NULL,
+                                                  country varchar NOT NULL,
+                                                  city varchar NOT NULL,
+                                                  resume_id bigint NOT NULL,
+                                                  FOREIGN KEY (resume_id) REFERENCES resume (id)
+            );
+
+            Create table if not exists boat_category (
+                                                    id bigserial PRIMARY KEY,
+                                                    name varchar NOT NULL
+            );
+
+            Create table if not exists boat (
+                                                 id bigserial PRIMARY KEY,
+                                                 user_id bigint NOT NULL,
+                                                 FOREIGN KEY (user_id) REFERENCES users (id),
+                                                 boat_type_id bigint NOT NULL,
+                                                 FOREIGN KEY (boat_type_id) REFERENCES boat_type (id),
+                                                 boat_category_id bigint NOT NULL,
+                                                 FOREIGN KEY (boat_category_id) REFERENCES boat_category (id),
+                                                 length bigint NOT NULL,
+                                                 cabins bigint NOT NULL,
+                                                 beds bigint NOT NULL,
+                                                 people bigint NOT NULL,
+                                                 capacity bigint,
+                                                 engine_power bigint NOT NULL,
+                                                 year bigint NOT NULL,
+                                                 manufacturer varchar NOT NULL,
+                                                 model varchar NOT NULL,
+                                                 port_address varchar NOT NULL,
+                                                 week_price decimal,
+                                                 captain_salary_per_day decimal,
+                                                 with_captain is_captain_type NOT NULL default 'no',
+                                                 has_engine boolean NOT NULL default FALSE,
+                                                 has_sail boolean NOT NULL default FALSE,
+                                                 photo_links text,
+                                                 required_license text
+                );
+
+                Create table if not exists insurance (
+                                                     id bigserial PRIMARY KEY,
+                                                     boat_id bigint NOT NULL,
+                                                     FOREIGN KEY (boat_id) REFERENCES boat (id),
+                                                     company_name varchar NOT NULL,
+                                                     certificate_number varchar NOT NULL,
+                                                     certificate_photo_link varchar
+                );
+
+
+            Create table if not exists boat_equipment (
+                                                         id bigserial PRIMARY KEY,
+                                                         boat_id bigint NOT NULL,
+                                                         FOREIGN KEY (boat_id) REFERENCES boat (id),
+                                                         tent boolean NOT NULL default FALSE,
+                                                         visor boolean NOT NULL default FALSE,
+                                                         shower_on_deck boolean NOT NULL default FALSE,
+                                                         dinner_table boolean NOT NULL default FALSE,
+                                                         stereosystem boolean NOT NULL default FALSE,
+                                                         pillows_for_cabin boolean NOT NULL default FALSE,
+                                                         teak_deck boolean NOT NULL default FALSE,
+                                                         bathing_platform boolean NOT NULL default FALSE,
+                                                         ladder_for_swimming boolean NOT NULL default FALSE,
+                                                         hot_water boolean NOT NULL default FALSE,
+                                                         conditioner boolean NOT NULL default FALSE,
+                                                         fan boolean NOT NULL default FALSE,
+                                                         heating boolean NOT NULL default FALSE,
+                                                         electric_bathroom boolean NOT NULL default FALSE,
+                                                         usb_socket boolean NOT NULL default FALSE,
+                                                         dinghy boolean NOT NULL default FALSE,
+                                                         bow_thruster boolean NOT NULL default FALSE,
+                                                         electric_windlass boolean NOT NULL default FALSE,
+                                                         electric_winches boolean NOT NULL default FALSE,
+                                                         autopilot boolean NOT NULL default FALSE,
+                                                         gps boolean NOT NULL default FALSE,
+                                                         echo_sounder boolean NOT NULL default FALSE,
+                                                         vhf boolean NOT NULL default FALSE,
+                                                         maps_and_gides boolean NOT NULL default FALSE,
+                                                         fridge boolean NOT NULL default FALSE,
+                                                         tableware boolean NOT NULL default FALSE,
+                                                         oven boolean NOT NULL default FALSE,
+                                                         dishwasher boolean NOT NULL default FALSE,
+                                                         snorkel_mask boolean NOT NULL default FALSE,
+                                                         fishing_gear boolean NOT NULL default FALSE,
+                                                         camping_gear boolean NOT NULL default FALSE,
+                                                         camp_bath boolean NOT NULL default FALSE,
+                                                         generator boolean NOT NULL default FALSE,
+                                                         solar_panels boolean NOT NULL default FALSE,
+                                                         invertor boolean NOT NULL default FALSE,
+                                                         v_220 boolean NOT NULL default FALSE,
+                                                         kinds_protective_mash boolean NOT NULL default FALSE,
+                                                         clean_bedlinen boolean NOT NULL default FALSE,
+                                                         clean_towels boolean NOT NULL default FALSE,
+                                                         wifi boolean NOT NULL default FALSE,
+                                                         outboard_engine boolean NOT NULL default FALSE,
+                                                         sup_board boolean NOT NULL default FALSE,
+                                                         gannaker boolean NOT NULL default FALSE,
+                                                         other text
+            );
+
+            Create table if not exists route (
+                                                         id bigserial PRIMARY KEY,
+                                                         boat_id bigint NOT NULL,
+                                                         FOREIGN KEY (boat_id) REFERENCES boat (id),
+                                                         name varchar NOT NULL,
+                                                         description varchar
+            );
+
+            Create table if not exists availability (
+                                                 id bigserial PRIMARY KEY,
+                                                 boat_id bigint NOT NULL,
+                                                 FOREIGN KEY (boat_id) REFERENCES boat (id),
+                                                 start_date time NOT NULL,
+                                                 end_date time NOT NULL
+            );
+
+            Create table if not exists booking (
+                                                        id bigserial PRIMARY KEY,
+                                                        boat_id bigint NOT NULL,
+                                                        FOREIGN KEY (boat_id) REFERENCES boat (id),
+                                                        user_id bigint NOT NULL,
+                                                        FOREIGN KEY (user_id) REFERENCES users (id),
+                                                        start_date time NOT NULL,
+                                                        end_date time NOT NULL,
+                                                        total_cost decimal NOT NULL
+                );
+
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
